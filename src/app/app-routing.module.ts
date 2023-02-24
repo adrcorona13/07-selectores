@@ -5,6 +5,9 @@ const routes: Routes = [
   {
     path: 'paises',
     loadChildren: () => import('./paises/paises.module').then(module => module.PaisesModule)
+  },
+  {
+    path: '**', redirectTo: 'paises'
   }
 ];
 
