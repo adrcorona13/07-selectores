@@ -1,1 +1,24 @@
-selector works!
+<h1 class="mt-5  ">Selectores anidados</h1>
+<form [formGroup]="formulario" (submit)="guardar()">
+    <div class="row mb-3">
+        <div class="col">
+            <label class="form-label">Continente:</label>
+            <div>
+                <select class="form-control" formControlName="region">
+                    <option value="">--Seleccione continente--</option>
+                    <option value="1">America</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col">
+            <button type="submit" class="btn btn-primary float-end">Guardar</button>
+        </div>
+    </div>
+</form>
+
+<h3>Formulario</h3>
+<pre>Valid: {{formulario.valid}}</pre>
+<pre>Value: {{formulario.value | json}}</pre>
