@@ -1,5 +1,11 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
 @Injectable({
     providedIn: 'root'
 })
-export class PaisService { }
+export class PaisService {
+
+    constructor(private httpClient: HttpClient) { }
+
+    
+}
