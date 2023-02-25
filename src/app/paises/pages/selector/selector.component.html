@@ -30,7 +30,7 @@
                 <option value="">--Seleccione frontera--</option>
                 <option 
                     *ngFor="let pais of fronteras;"
-                    [value]="pais">{{pais | titlecase}}</option>
+                    [value]="pais.alpha3Code">{{pais.name | titlecase}}</option>
             </select>
         </div>
     </div>
