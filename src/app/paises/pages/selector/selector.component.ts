@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { PaisService } from '../../services/pais.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Pais, PaisSmall } from '../../interfaces/paises.interface';
-import { switchMap, tap } from 'rxjs';
+import { delay, switchMap, tap } from 'rxjs';
 @Component({
     selector: 'app-selector',
     templateUrl: 'selector.component.html'
 })
 export class SelectorComponent implements OnInit {
+
+    cargando: boolean = false;
 
     formulario: FormGroup = this.fb.group({
         region: ['', [Validators.required]],
@@ -15,9 +17,9 @@ export class SelectorComponent implements OnInit {
         fronteras: ['', [Validators.required]],
     })
 
-    regiones: string[] = [];
-    paises: PaisSmall[] = [];
-    fronteras: string[] = [];
+    regiones    : string[] = [];
+    paises      : PaisSmall[] = [];
+    fronteras   : string[] = [];
 
     constructor(
         private paisService: PaisService,
@@ -34,16 +36,26 @@ export class SelectorComponent implements OnInit {
 
         this.formulario.get('region')?.valueChanges
             .pipe(
-                tap((_) => this.formulario.get('pais')?.reset()),
+                tap((_) => {
+                    this.formulario.get('pais')?.reset()
+                    this.cargando = true;
+                }),
                 switchMap(region => this.paisService.getPaisesPorRegion(region))
-            ).subscribe(paises => this.paises = paises);
+            ).subscribe(paises => {
+                this.paises = paises;
+                this.cargando = false;
+            });
         
         this.formulario.get('pais')?.valueChanges
             .pipe(
-                tap( (_) => this.formulario.get('fronteras')?.reset()),
-                switchMap(pais => this.paisService.getPaisesPorCodigo(pais))
+                tap( (_) => {
+                    this.formulario.get('fronteras')?.reset();
+                    this.cargando = true;
+                }),
+                switchMap(codigo => this.paisService.getPaisesPorCodigo(codigo))
             ).subscribe(pais => {
-                if (pais) this.fronteras = pais.borders;
+                this.fronteras = pais?.borders || [];
+                this.cargando = false;
             })
     }
 
